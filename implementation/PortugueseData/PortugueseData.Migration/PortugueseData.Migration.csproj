@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Excel">
+      <HintPath>..\SharedLibs\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\SharedLibs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=3.3.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\NHibernate.dll</HintPath>
@@ -55,6 +61,10 @@
     <ProjectReference Include="..\PortugueseData.BLL\PortugueseData.BLL.csproj">
       <Project>{53C19D57-A201-4676-B026-89AB3D7BC70E}</Project>
       <Name>PortugueseData.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PortugueseData.DAL\PortugueseData.DAL.csproj">
+      <Project>{8DDCE3AC-DB20-47DE-A5E3-996135687DB8}</Project>
+      <Name>PortugueseData.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

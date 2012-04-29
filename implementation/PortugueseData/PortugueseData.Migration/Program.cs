@@ -7,6 +7,10 @@ using NHibernate;
 
 using PortugueseData.BLL;
 using NHibernate.Cfg;
+using NHibernate.Tool.hbm2ddl;
+using PortugueseData.DAL;
+using Excel;
+using System.IO;
 
 
 namespace PortugueseData.Migration
@@ -89,7 +93,38 @@ namespace PortugueseData.Migration
 
         private static IList<ExcelItem> GetExcelItems(string fileName, int startLine)
         {
-            throw new NotImplementedException();
+            IList<ExcelItem> excelItems = new List<ExcelItem>();
+
+            FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+            IExcelDataReader excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
+
+            for (int i = 1; i < startLine; i++)
+            {
+                excelReader.Read();
+            }
+
+            while (excelReader.Read())
+            {
+                try
+                {
+                    ExcelItem excelItem = new ExcelItem();
+
+                    excelItem.CodigoFinancas = excelReader.GetString(0);
+                    excelItem.CodigoDistrito = excelReader.GetString(1);
+                    excelItem.Distrito = excelReader.GetString(2);
+                    excelItem.CodigoConcelho = excelReader.GetString(3);
+                    excelItem.Concelho = excelReader.GetString(4);
+                    excelItem.CodigoFreguesia = excelReader.GetString(5);
+                    excelItem.Freguesia = excelReader.GetString(6);
+                    excelItems.Add(excelItem);
+                }
+                catch (Exception ex)
+                {
+                    //@todo: log
+                }
+            }
+
+            return excelItems;
         }
 
         #endregion
