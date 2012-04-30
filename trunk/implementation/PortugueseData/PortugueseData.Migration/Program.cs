@@ -11,6 +11,8 @@ using NHibernate.Tool.hbm2ddl;
 using PortugueseData.DAL;
 using Excel;
 using System.IO;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
 
 
 namespace PortugueseData.Migration
@@ -39,9 +41,14 @@ namespace PortugueseData.Migration
         /// </summary>
         private static IList<ExcelItem> errors = new List<ExcelItem>();
 
-        
+        #region nHibernate Class Variables
+
+        private static ISessionFactory sessionFactory;
+        private static ISession currentSession;
+
         #endregion
 
+        #endregion
 
         /// <summary>
         /// Migrates data from the xls file from: http://info.portaldasfinancas.gov.pt/pt/docs/
@@ -49,14 +56,46 @@ namespace PortugueseData.Migration
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            Initialize();
+
             string fileName = args[0];
             int startLine = int.Parse(args[1]);
 
             IList<ExcelItem> excelItems = GetExcelItems(fileName, startLine);
-            SaveExcelItems(session, excelItems);
+            SaveExcelItems(currentSession, excelItems);
         }
 
         #region Helper Methods
+
+        #region nHibernate Initialization
+
+        private static void Initialize()
+        {
+            sessionFactory = CreateSessionFactory();
+            currentSession = sessionFactory.OpenSession();
+        }
+
+        private static ISessionFactory CreateSessionFactory()
+        {
+            return Fluently.Configure().Database(
+                            MySQLConfiguration.Standard.ConnectionString(
+                            c => c.FromConnectionStringWithKey("DistritosConnectionString")
+                        )
+                    )
+                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Distrito>())
+                    .ExposeConfiguration(BuildSchema)
+                    .BuildSessionFactory();
+        }
+
+        private static void BuildSchema(Configuration config)
+        {
+            // this NHibernate tool takes a configuration (with mapping info in)
+            // and exports a database schema from it
+            new SchemaExport(config)
+              .Create(false, true);
+        }
+
+        #endregion
 
         private static void SaveExcelItems(ISession session, IList<ExcelItem> excelItems)
         {
