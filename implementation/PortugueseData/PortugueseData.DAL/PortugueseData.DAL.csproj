@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\SharedLibs\FluentNHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\SharedLibs\NHibernate.dll</HintPath>
     </Reference>
@@ -46,17 +49,15 @@
     <Compile Include="Entities\Concelho.cs" />
     <Compile Include="Entities\Freguesia.cs" />
     <Compile Include="Entities\Distrito.cs" />
+    <Compile Include="Mappings\FreguesiaMap.cs" />
+    <Compile Include="Mappings\ConcelhoMap.cs" />
+    <Compile Include="Mappings\DistritoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="hibernate.cfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mappings\Freguesia.hbm.xml" />
-    <EmbeddedResource Include="Mappings\Concelho.hbm.xml" />
-    <EmbeddedResource Include="Mappings\Distrito.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

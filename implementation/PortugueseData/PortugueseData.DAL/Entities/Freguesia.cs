@@ -7,10 +7,10 @@ namespace PortugueseData.DAL
 {
     public class Freguesia
     {
-        public int Id { get; set; }
-        public String CodigoFreguesia { get; set; }
-        public String Designacao { get; set; }
+        public virtual int Id { get; private set; }
+        public virtual String CodigoFreguesia { get; set; }
+        public virtual String Designacao { get; set; }
 
-        public Concelho Concelho { get; set; }
+        public virtual Concelho Concelho { get; set; }
     }
 }
