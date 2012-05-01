@@ -10,7 +10,8 @@ namespace PortugueseData.DAL.Mappings
     {
         public DistritoMap()
         {
-            Id(x => x.Id).GeneratedBy.Identity();
+            Table("distritos");
+            Id(x => x.Id, "id").GeneratedBy.Identity();
             Map(x => x.CodigoDistrito, "codigo").Length(20).Not.Nullable();
             Map(x => x.Designacao, "designacao").Length(150).Not.Nullable();
 

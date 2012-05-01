@@ -7,7 +7,7 @@ namespace PortugueseData.DAL
 {
     public class Distrito
     {
-        public virtual int Id { get; private set; }
+        public virtual int Id { get; set; }
         public virtual string CodigoDistrito { get; set; }
         public virtual String Designacao { get; set; }
 
