@@ -10,11 +10,12 @@ namespace PortugueseData.DAL.Mappings
     {
         public FreguesiaMap()
         {
-            Id(x => x.Id).GeneratedBy.Identity();
+            Table("freguesias");
+            Id(x => x.Id, "id").GeneratedBy.Identity();
             Map(x => x.CodigoFreguesia, "codigo").Length(20).Not.Nullable();
             Map(x => x.Designacao, "designacao").Length(150).Not.Nullable();
 
-            References<Concelho>(x => x.Concelho);
+            References<Concelho>(x => x.Concelho, "concelho_id");
         }
     }
 }

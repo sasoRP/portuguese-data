@@ -21,6 +21,8 @@ namespace PortugueseData.Migration
     {
         #region Class Variables
 
+        private static string SQL_FILE = @"C:\distritos-schema.sql";
+
         /// <summary>
         /// Lista de distritos guardados com sucesso.
         /// </summary>
@@ -63,6 +65,9 @@ namespace PortugueseData.Migration
 
             IList<ExcelItem> excelItems = GetExcelItems(fileName, startLine);
             SaveExcelItems(currentSession, excelItems);
+
+            currentSession.Flush();
+            currentSession.Close();
         }
 
         #region Helper Methods
@@ -91,8 +96,7 @@ namespace PortugueseData.Migration
         {
             // this NHibernate tool takes a configuration (with mapping info in)
             // and exports a database schema from it
-            new SchemaExport(config)
-              .Create(false, true);
+            new SchemaExport(config).SetOutputFile(SQL_FILE).Create(false,false);
         }
 
         #endregion
@@ -109,16 +113,16 @@ namespace PortugueseData.Migration
                         dicDistritos.Add(excelItem.CodigoDistrito, excelItem.Distrito);
                     }
 
-                    if (!dicConcelhos.ContainsKey(excelItem.CodigoConcelho))
+                    if (!dicConcelhos.ContainsKey(excelItem.CodigoDistrito + "-" + excelItem.CodigoConcelho))
                     {
                         GeneralBLL.CreateConcelho(session, excelItem.CodigoDistrito, excelItem.CodigoConcelho, excelItem.Concelho);
-                        dicConcelhos.Add(excelItem.CodigoConcelho, excelItem.Concelho);
+                        dicConcelhos.Add(excelItem.CodigoDistrito + "-" + excelItem.CodigoConcelho, excelItem.Concelho);
                     }
 
-                    if (!dicFreguesias.ContainsKey(excelItem.CodigoFreguesia))
+                    if (!dicFreguesias.ContainsKey(excelItem.CodigoDistrito + "-" + excelItem.CodigoConcelho + "-" + excelItem.CodigoFreguesia))
                     {
                         GeneralBLL.CreateFreguesia(session, excelItem.CodigoConcelho, excelItem.CodigoFreguesia, excelItem.Freguesia);
-                        dicFreguesias.Add(excelItem.CodigoFreguesia, excelItem.Freguesia);
+                        dicFreguesias.Add(excelItem.CodigoDistrito + "-" + excelItem.CodigoConcelho + "-" + excelItem.CodigoFreguesia, excelItem.Freguesia);
                     }
 
                 }
@@ -151,9 +155,9 @@ namespace PortugueseData.Migration
                     excelItem.CodigoFinancas = excelReader.GetString(0);
                     excelItem.CodigoDistrito = excelReader.GetString(1);
                     excelItem.Distrito = excelReader.GetString(2);
-                    excelItem.CodigoConcelho = excelReader.GetString(3);
+                    excelItem.CodigoConcelho = excelReader.GetString(1) + "-" + excelReader.GetString(3);
                     excelItem.Concelho = excelReader.GetString(4);
-                    excelItem.CodigoFreguesia = excelReader.GetString(5);
+                    excelItem.CodigoFreguesia = excelReader.GetString(1) + "-" + excelReader.GetString(3) + "-" + excelReader.GetString(5);
                     excelItem.Freguesia = excelReader.GetString(6);
                     excelItems.Add(excelItem);
                 }

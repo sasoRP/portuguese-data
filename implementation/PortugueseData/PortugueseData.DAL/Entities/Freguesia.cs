@@ -7,7 +7,7 @@ namespace PortugueseData.DAL
 {
     public class Freguesia
     {
-        public virtual int Id { get; private set; }
+        public virtual int Id { get; set; }
         public virtual String CodigoFreguesia { get; set; }
         public virtual String Designacao { get; set; }
 

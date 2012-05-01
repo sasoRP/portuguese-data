@@ -10,12 +10,13 @@ namespace PortugueseData.DAL.Mappings
     {
         public ConcelhoMap ()
 	    {
-            Id(x => x.Id).GeneratedBy.Identity();
+            Table("concelhos");
+            Id(x => x.Id, "id").GeneratedBy.Identity();
             Map(x => x.CodigoConcelho, "codigo").Length(20).Not.Nullable();
             Map(x => x.Designacao, "designacao").Length(150).Not.Nullable();
 
             HasMany<Freguesia>(x => x.Freguesias).Cascade.All();
-            References<Distrito>(x => x.Distrito);
+            References<Distrito>(x => x.Distrito, "distrito_id");
 	    }
 
         
