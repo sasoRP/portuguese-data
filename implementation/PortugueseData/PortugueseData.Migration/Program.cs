@@ -13,6 +13,8 @@ using Excel;
 using System.IO;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using System.Threading;
+using System.Globalization;
 
 
 namespace PortugueseData.Migration
@@ -146,6 +148,8 @@ namespace PortugueseData.Migration
                 excelReader.Read();
             }
 
+            TextInfo textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+
             while (excelReader.Read())
             {
                 try
@@ -154,11 +158,11 @@ namespace PortugueseData.Migration
 
                     excelItem.CodigoFinancas = excelReader.GetString(0);
                     excelItem.CodigoDistrito = excelReader.GetString(1);
-                    excelItem.Distrito = excelReader.GetString(2);
+                    excelItem.Distrito = textInfo.ToTitleCase(excelReader.GetString(2).ToLowerInvariant());
                     excelItem.CodigoConcelho = excelReader.GetString(1) + "-" + excelReader.GetString(3);
-                    excelItem.Concelho = excelReader.GetString(4);
+                    excelItem.Concelho = textInfo.ToTitleCase(excelReader.GetString(4).ToLowerInvariant());
                     excelItem.CodigoFreguesia = excelReader.GetString(1) + "-" + excelReader.GetString(3) + "-" + excelReader.GetString(5);
-                    excelItem.Freguesia = excelReader.GetString(6);
+                    excelItem.Freguesia = textInfo.ToTitleCase(excelReader.GetString(6).ToLowerInvariant());
                     excelItems.Add(excelItem);
                 }
                 catch (Exception ex)

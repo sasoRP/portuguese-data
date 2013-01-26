@@ -18,7 +18,5 @@ namespace PortugueseData.DAL.Mappings
             HasMany<Freguesia>(x => x.Freguesias).Cascade.All();
             References<Distrito>(x => x.Distrito, "distrito_id");
 	    }
-
-        
     }
 }
