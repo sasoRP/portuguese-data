@@ -1,0 +1,1 @@
+Importação de dados de Portugal (distritos, concelhos, freguesias) para uma base de dados mySQL.
